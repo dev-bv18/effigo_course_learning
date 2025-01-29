@@ -1,7 +1,5 @@
-package com.example.demo;
+package com.example.demo.game;
 
-import com.example.demo.game.GameRunner;
-import com.example.demo.game.GamingConsole;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 
