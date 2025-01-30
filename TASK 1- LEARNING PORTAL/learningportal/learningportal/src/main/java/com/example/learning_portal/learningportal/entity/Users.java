@@ -1,5 +1,6 @@
 package com.example.learning_portal.learningportal.entity;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,14 +11,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name="users")
 public class Users {
-
-    @Id
+  @Id
     @Column(name="user_id", nullable = false,unique = true)
     private long id;
 
