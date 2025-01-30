@@ -14,19 +14,22 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="course")
 public class Course {
+    public enum Category{
+        AWS,JAVA,REACT
+    }
     @Id
-    @Column(name="course_id")
+    @Column(name="course_id",nullable = false,unique = true)
     private long id;
 
-    @Column(name="course_category")
-    private long category;
+    @Column(name="course_category",nullable = false)
+    private Category category;
 
-    @Column(name="description")
+    @Column(name="description",nullable = false)
     private String desc;
 
-    @Column(name="price")
+    @Column(name="price",nullable = false)
     private double cost;
 
-    @Column(name="title")
+    @Column(name="title",nullable = false,unique = true)
     private String course_title;
 }

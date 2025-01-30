@@ -18,6 +18,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name="users")
 public class Users {
+  public enum Role{
+    ADMIN,LEARNER,AUTHOR
+  }
   @Id
     @Column(name="user_id", nullable = false,unique = true)
     private long id;
@@ -29,7 +32,7 @@ public class Users {
     private LocalDateTime registrationDateTime=LocalDateTime.now();
 
     @Column(name="user_role",nullable = false)
-    private long userRole;
+    private Role userRole;
 
     @Column(name="username",nullable = false,unique = true)
     private long userName;
