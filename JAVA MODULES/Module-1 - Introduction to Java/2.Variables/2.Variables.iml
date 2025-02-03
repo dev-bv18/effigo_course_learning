@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/Challenge 2" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Debugging" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Interactive  Application" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Math Operators" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/NextLineTrap" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Workbook 2.1" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Workbook 2.2" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Workbook 2.3" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Workbook 2.4" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Workbook 2.5" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

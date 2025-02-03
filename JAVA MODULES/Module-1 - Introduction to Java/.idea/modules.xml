@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/1.Getting Started/1.Getting Started.iml" filepath="$PROJECT_DIR$/1.Getting Started/1.Getting Started.iml" />
+      <module fileurl="file://$PROJECT_DIR$/2.Variables/2.Variables.iml" filepath="$PROJECT_DIR$/2.Variables/2.Variables.iml" />
+      <module fileurl="file://$PROJECT_DIR$/3.Booleans and Conditionals/3.Booleans and Conditionals.iml" filepath="$PROJECT_DIR$/3.Booleans and Conditionals/3.Booleans and Conditionals.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Module-1 - Introduction to Java.iml" filepath="$PROJECT_DIR$/.idea/Module-1 - Introduction to Java.iml" />
+    </modules>
+  </component>
+</project>
