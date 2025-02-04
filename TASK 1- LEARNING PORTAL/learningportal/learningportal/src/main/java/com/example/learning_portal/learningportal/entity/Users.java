@@ -1,10 +1,7 @@
 package com.example.learning_portal.learningportal.entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,17 +13,18 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="users")
+@Table(name="users",schema = "public")
 public class Users {
   public enum Role{
     ADMIN,LEARNER,AUTHOR
   }
   @Id
-    @Column(name="user_id", nullable = false,unique = true)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="user_id")
+    private Long id;
 
     @Column(name="password",nullable = false)
-    private long passWord;
+    private String passWord;
 
     @Column(name = "registration_date_time")
     private LocalDateTime registrationDateTime=LocalDateTime.now();
@@ -35,6 +33,6 @@ public class Users {
     private Role userRole;
 
     @Column(name="username",nullable = false,unique = true)
-    private long userName;
+    private String userName;
 
 }
