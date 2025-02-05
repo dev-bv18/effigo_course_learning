@@ -15,8 +15,8 @@ public class FavouriteCourse {
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 @Column(name="favourite_id")
     private Long favouriteId;
-@ManyToOne
-    @JoinColumn(name="registration_id")
+@OneToOne
+    @JoinColumn(name="registrationId")
     private RegisteredCourses registeredCourse;
 
 }

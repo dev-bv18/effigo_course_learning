@@ -1,5 +1,6 @@
 package com.example.learning_portal.learningportal.controller;
 
+import com.example.learning_portal.learningportal.dto.CourseDTO;
 import com.example.learning_portal.learningportal.entity.Course;
 import com.example.learning_portal.learningportal.service.CourseService;
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    private static Logger log= (Logger) LoggerFactory.getLogger(CourseController.class);
+    private static Logger log=LoggerFactory.getLogger(CourseController.class);
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable Long id){
@@ -46,6 +47,17 @@ public class CourseController {
         catch(Exception e){
             log.error("Error while fetching course: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @PutMapping("/update-course")
+        public ResponseEntity<Course> updateCourse(@RequestBody CourseDTO courseDTO){
+        try{
+            log.info("Updating course data....");
+            return ResponseEntity.ok(courseService.updateCourse(courseDTO));
+        }
+        catch(Exception e){
+            log.error("Error while fetching courses: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 
         }
     }
@@ -62,21 +74,17 @@ public class CourseController {
         }
     }
     @PostMapping("/create-course")
-    public ResponseEntity<Course> createNewCourse(@RequestBody Course course){
-       try{ log.info("COURSE CONTROLLER");
-        log.info(course.getCourseTitle());
-        log.info(course.getDesc());
-        log.info(String.valueOf(course.getCost()));
-        log.info(String.valueOf(course.getCategory()));
+    public ResponseEntity<Course> createNewCourse(@RequestBody CourseDTO courseDTO) {
+        try { log.info("COURSE CONTROLLER");
+        log.info(courseDTO.getCourseTitle());
+        log.info(courseDTO.getDesc());
+        log.info(String.valueOf(courseDTO.getCost()));
+        log.info(String.valueOf(courseDTO.getCategory()));
 
-           Course savedCourse = courseService.createNewCourse(course);
-           return ResponseEntity.ok(savedCourse);}
-       catch(Exception e)
-       {
-           log.error("Error while creating course: {}", e.getMessage(), e);
-           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-
-
-       }
+            return ResponseEntity.ok(courseService.createNewCourse(courseDTO));
+        } catch (Exception e) {
+            log.error("Error while creating course: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.learning_portal.learningportal.controller;
 
+import com.example.learning_portal.learningportal.dto.UsersDTO;
 import com.example.learning_portal.learningportal.entity.Users;
 import com.example.learning_portal.learningportal.service.UsersService;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ public class UsersController {
 
     private static Logger log= LoggerFactory.getLogger(UsersController.class);
     @PostMapping("/create-users")
-    public ResponseEntity<Users> createNewUsers(@RequestBody Users users){
+    public ResponseEntity<Users> createNewUsers(@RequestBody UsersDTO usersDTO){
       try{  log.info("USERS CONTROLLER");
 //        log.info(String.valueOf(users.getUserRole()));
 //        log.info(String.valueOf(users.getUserName()));
@@ -28,7 +29,7 @@ public class UsersController {
 //        log.info(String.valueOf(users.getRegistrationDateTime()));
 
         log.info("creating user...");
-        Users savedUsers=usersService.createNewUsers(users);
+        Users savedUsers=usersService.createNewUsers(usersDTO);
         log.info("successfully created user...");
         return ResponseEntity.ok(savedUsers);}
     catch(Exception e)
@@ -57,7 +58,17 @@ public ResponseEntity<String> deleteUser(@PathVariable Long id){
       }
     return ResponseEntity.ok(message);
 }
-
+@PutMapping("/update-users")
+public ResponseEntity<Users> updateUsers(@RequestBody UsersDTO usersDTO){
+        try{
+            log.info("Updating user data....");
+            return ResponseEntity.ok(usersService.updateUsers(usersDTO));
+        }
+        catch(Exception e){
+            log.error("Error while fetching courses: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+}
 
     @GetMapping("{id}")
     public ResponseEntity<Optional<Users>> getOneUser(@PathVariable Long id)

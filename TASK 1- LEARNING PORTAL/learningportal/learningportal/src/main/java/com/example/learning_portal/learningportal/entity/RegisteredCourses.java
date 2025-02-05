@@ -14,7 +14,7 @@ public class RegisteredCourses {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="registration_id")
-    private Long id;
+    private Long registrationId;
 
     @ManyToOne
     @JoinColumn(name="user_id")
