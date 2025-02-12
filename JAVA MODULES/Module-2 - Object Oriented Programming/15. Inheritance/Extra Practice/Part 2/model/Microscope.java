@@ -10,6 +10,16 @@ public class Microscope extends LabEquipment {
         setMagnification(magnification);
     }
 
+    public Microscope(Microscope source) {
+        super(source);
+        setMagnification(source.magnification);
+    }
+
+    @Override
+    public LabEquipment clone() {
+        return new Microscope(this);
+    }
+
     public int getMagnification() {
         return magnification;
     }

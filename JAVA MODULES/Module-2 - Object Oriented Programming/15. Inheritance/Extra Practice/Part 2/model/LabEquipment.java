@@ -13,6 +13,14 @@ public abstract class LabEquipment {
         setYear(year);
     }
 
+    public LabEquipment(LabEquipment source) {
+        setManufacturer(source.manufacturer);
+        setModel(source.model);
+        setYear(source.year);
+    }
+
+    public abstract LabEquipment clone();
+
     public String getManufacturer() {
         return manufacturer;
     }
