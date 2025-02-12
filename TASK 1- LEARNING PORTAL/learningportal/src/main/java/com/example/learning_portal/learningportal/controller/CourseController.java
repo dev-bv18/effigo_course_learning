@@ -1,7 +1,6 @@
 package com.example.learning_portal.learningportal.controller;
 
 import com.example.learning_portal.learningportal.dto.CourseDTO;
-import com.example.learning_portal.learningportal.entity.Course;
 import com.example.learning_portal.learningportal.mapper.CoursePopulator;
 import com.example.learning_portal.learningportal.service.CourseService;
 import org.slf4j.Logger;
@@ -65,6 +64,17 @@ public class CourseController {
             log.error("Error while fetching courses: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 
+        }
+    }
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<CourseDTO>> findByCategory(@PathVariable String category){
+        try{
+            log.info("Fetching "+category+" courses ....");
+            List<CourseDTO> courses=courseService.findByCategory(category);
+            return ResponseEntity.ok(courses);
+        } catch (Exception e) {
+            log.error("Error while fetching courses: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     @GetMapping("/get-courses")

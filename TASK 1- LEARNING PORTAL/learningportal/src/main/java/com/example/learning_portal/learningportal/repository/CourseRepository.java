@@ -9,6 +9,8 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course,Long> {
-   @Query(value="SELECT c FROM course c WHERE course_category=:category",nativeQuery=true)
+
+   @Query(value = "SELECT * FROM course WHERE course_category::TEXT = :category", nativeQuery = true)
    List<Course> findByCategory(@Param("category") String category);
+
 }

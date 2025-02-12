@@ -11,10 +11,12 @@ import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 public interface RegisteredCoursesPopulator {
+
     @Mapping(target ="registrationId", source = "registrationId")
     @Mapping(target = "user", source="user")
     @Mapping(target = "course" ,source="course")
     RegisteredCourses dtoToRegisteredCourse(RegisteredCoursesDTO registeredCoursesDTO);
+
     RegisteredCoursesDTO registeredCoursetoDTO(RegisteredCourses registeredCourses);
     default RegisteredCoursesDTO optionalRegisteredCourseToDTO(Optional<RegisteredCourses> registeredCourses) {
         if (registeredCourses.isPresent()) {
