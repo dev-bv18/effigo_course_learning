@@ -245,7 +245,7 @@ SELECT LTRIM('   MyText    ')
 SELECT RTRIM('   MyText    ')
 SELECT RTRIM(LTRIM('   MyText    '))
 
-
+............................................
 
 
 
