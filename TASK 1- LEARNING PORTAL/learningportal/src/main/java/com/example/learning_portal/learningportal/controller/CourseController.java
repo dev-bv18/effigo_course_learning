@@ -1,6 +1,8 @@
 package com.example.learning_portal.learningportal.controller;
 
 import com.example.learning_portal.learningportal.dto.CourseDTO;
+import com.example.learning_portal.learningportal.exception.CourseFetchException;
+import com.example.learning_portal.learningportal.exception.CourseNotFoundException;
 import com.example.learning_portal.learningportal.mapper.CoursePopulator;
 import com.example.learning_portal.learningportal.service.CourseService;
 import org.slf4j.Logger;
@@ -22,9 +24,9 @@ public class CourseController {
     @Autowired
     private CoursePopulator coursePopulator;
 
-    private static Logger log=LoggerFactory.getLogger(CourseController.class);
+    private static Logger log = LoggerFactory.getLogger(CourseController.class);
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable Long id) {
         try {
             CourseDTO courseDTO = courseService.getOneCourse(id);
@@ -33,12 +35,14 @@ public class CourseController {
                 log.info("Course {} deleted successfully!", id);
                 return ResponseEntity.ok("Course " + id + " deleted successfully!");
             }
-        } catch (Exception e) {
-            log.error("Error deleting course: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course " + id + " not found!");
+            else
+                throw new CourseNotFoundException(id);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course " + id + " not found!");
-    }
+        catch (CourseNotFoundException e) {
+            log.error("Error deleting course: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while deleting course " + id);  }
+       }
 
     @GetMapping("{id}")
     public ResponseEntity<Optional<CourseDTO>> getOneCourse(@PathVariable Long id){
@@ -77,19 +81,27 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    @GetMapping("/get-courses")
-    public ResponseEntity<List<CourseDTO>> getAllCourses(){
-        try{
-            log.info("Fetching courses....");
-            List<CourseDTO> courses=courseService.getAllCourses();
-            return ResponseEntity.ok(courses);
-        }
-        catch(Exception e){
-            log.error("Error while fetching courses: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 
+    @GetMapping("/get-courses")
+    public ResponseEntity<List<CourseDTO>> getAllCourses() {
+        try {
+            log.info("Fetching courses....");
+            List<CourseDTO> courses = courseService.getAllCourses();
+
+            if (courses.isEmpty()) {
+                throw new CourseFetchException("No courses available.");
+            }
+
+            return ResponseEntity.ok(courses);
+        } catch (CourseFetchException e) {
+            log.error("Course fetch error: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error while fetching courses: {}", e.getMessage(), e);
+            throw new CourseFetchException("An error occurred while fetching courses.");
         }
     }
+
     @PostMapping("/create-course")
     public ResponseEntity<CourseDTO> createNewCourse(@RequestBody CourseDTO courseDTO) {
         try { log.info("COURSE CONTROLLER");
@@ -100,7 +112,7 @@ public class CourseController {
         CourseDTO tempCourseDTO=courseService.createNewCourse(courseDTO);
         return ResponseEntity.ok(tempCourseDTO);
         } catch (Exception e) {
-            log.error("Error while creating course: {}", e.getMessage(), e);
+            log.error("Error while creating course: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

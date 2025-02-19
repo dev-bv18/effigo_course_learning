@@ -15,10 +15,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class FavouriteCourseService {
-    @Autowired
+
     private FavouriteCourseRepository favouriteCourseRepository;
-    @Autowired
     private FavouriteCoursePopulator favouriteCoursePopulator;
+
+    public FavouriteCourseService(FavouriteCourseRepository favouriteCourseRepository,FavouriteCoursePopulator favouriteCoursePopulator){
+        this.favouriteCoursePopulator=favouriteCoursePopulator;
+        this.favouriteCourseRepository=favouriteCourseRepository;
+    }
     private static Logger log = LoggerFactory.getLogger(FavouriteCourseService.class);
     public List<FavouriteCourseDTO> getAllFavouriteCourse(){
         return  favouriteCourseRepository.findAll().stream().map(favouriteCoursePopulator::favouriteCourseToDto).collect(Collectors.toList());

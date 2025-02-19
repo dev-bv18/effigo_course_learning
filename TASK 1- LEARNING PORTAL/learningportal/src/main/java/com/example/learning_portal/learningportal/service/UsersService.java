@@ -16,11 +16,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class UsersService {
-    @Autowired
-    private UsersRepository usersRepository;
-    @Autowired
-    private UsersPopulator usersPopulator;
 
+    private UsersRepository usersRepository;
+    private UsersPopulator usersPopulator;
+    public UsersService(UsersRepository usersRepository,UsersPopulator usersPopulator){
+        this.usersPopulator=usersPopulator;
+        this.usersRepository=usersRepository;
+    }
     private static Logger log= LoggerFactory.getLogger(UsersService.class);
     public List<UsersDTO> getAllUsers(){
 

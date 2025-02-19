@@ -13,10 +13,12 @@ import java.util.stream.Collectors;
 
 @Service
 public class RegisteredCoursesService {
-    @Autowired
     private RegisteredCoursesRepository registeredCoursesRepository;
-    @Autowired
     public RegisteredCoursesPopulator registeredCoursesPopulator;
+    public RegisteredCoursesService(RegisteredCoursesRepository registeredCoursesRepository,RegisteredCoursesPopulator registeredCoursesPopulator){
+        this.registeredCoursesPopulator=registeredCoursesPopulator;
+        this.registeredCoursesRepository=registeredCoursesRepository;
+    }
     public List<RegisteredCoursesDTO> getAllRegisteredCourses(){
         return registeredCoursesRepository.findAll().stream().map(registeredCoursesPopulator::registeredCoursetoDTO).collect(Collectors.toList());
     }
@@ -28,9 +30,20 @@ public class RegisteredCoursesService {
         registeredCoursesRepository.deleteById(id);
     }
 
-    public RegisteredCoursesDTO createNewRegisteredCourses(RegisteredCoursesDTO registeredCoursesDTO){
-        RegisteredCourses registeredCourses=registeredCoursesPopulator.dtoToRegisteredCourse(registeredCoursesDTO);
-        RegisteredCourses savedCourse=registeredCoursesRepository.save(registeredCourses);
+    public RegisteredCoursesDTO createNewRegisteredCourses(RegisteredCoursesDTO registeredCoursesDTO) {
+        Long userId = registeredCoursesDTO.getUser().getId();
+        Long courseId = registeredCoursesDTO.getCourse().getId();
+
+
+        boolean alreadyRegistered = registeredCoursesRepository.existsByUserIdAndCourseId(userId, courseId);
+        if (alreadyRegistered) {
+            throw new RuntimeException("User is already registered for this course.");
+        }
+
+
+        RegisteredCourses registeredCourses = registeredCoursesPopulator.dtoToRegisteredCourse(registeredCoursesDTO);
+        RegisteredCourses savedCourse = registeredCoursesRepository.save(registeredCourses);
+
         return registeredCoursesPopulator.registeredCoursetoDTO(savedCourse);
     }
 }

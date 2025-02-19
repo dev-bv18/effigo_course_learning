@@ -20,7 +20,7 @@ public class RegisteredCourses {
     @JoinColumn(name="user_id")
     private Users user;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="course_id")
     private Course course;
 }

@@ -16,9 +16,10 @@ public interface CoursePopulator {
     @Mapping(target = "desc", source = "desc")
     @Mapping(target = "cost", source = "cost")
     @Mapping(target = "courseTitle", source = "courseTitle")
-//    Course populateCourse(CourseDTO courseDTO);
     Course courseRequestToDto(CourseDTO courseDTO);
+
     CourseDTO courseToDTO(Course course);
+
     default CourseDTO optionalCourseToDTO(Optional<Course> course) {
         if (course.isPresent()) {
             return courseToDTO(course.get());

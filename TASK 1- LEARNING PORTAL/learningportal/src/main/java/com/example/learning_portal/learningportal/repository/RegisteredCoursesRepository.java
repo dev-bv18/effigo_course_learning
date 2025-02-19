@@ -10,4 +10,5 @@ import java.util.List;
 public interface RegisteredCoursesRepository extends JpaRepository<RegisteredCourses,Long> {
 // @Query(value = "SELECT r FROM RegisteredCourses r WHERE r.category",nativeQuery = true)
 // List<RegisteredCourses> findByUserId(Long userId);
+boolean existsByUserIdAndCourseId(Long userId, Long courseId);
 }

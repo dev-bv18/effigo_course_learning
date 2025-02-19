@@ -5,12 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="course")
+@Table(name="course",schema = "public")
 public class Course {
+
     public enum Category{
         AWS,JAVA,REACT,C
     }
