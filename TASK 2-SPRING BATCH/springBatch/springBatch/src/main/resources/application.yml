@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: springBatch
+  batch:
+    jdbc:
+      initialize-schema: ALWAYS
+    job:
+      enabled: false
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/student_data
+    username: postgres
+    password: baibhabnayak3121218
+    initialization-mode: always  # Ensure the schema.sql is executed
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    hibernate:
+      ddl-auto: create-drop  # Automatically update the schema based on entity classes
+    show-sql: true  # Show SQL in the logs for debugging purposes
+  server:
+    port: 8082  # This will ensure the application runs on port 8082
+logging:
+  level:
+    root: INFO
+    org:
+      springframework: INFO
+      hibernate:
+        SQL: INFO
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+
+
