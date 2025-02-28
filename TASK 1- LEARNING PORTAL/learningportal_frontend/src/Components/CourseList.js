@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import Banner from "./Banner";
 
 const CourseList = () => {
 const navigate = useNavigate();
@@ -109,7 +110,9 @@ const navigate = useNavigate();
   }, []);
 
   return (
-    <div className="container my-4"><button
+    <div className="container my-4">
+    <Banner/>
+    <button
                                       className="btn btn-outline-dark rounded-circle position-fixed"
                                       style={{
                                         bottom: "20px",

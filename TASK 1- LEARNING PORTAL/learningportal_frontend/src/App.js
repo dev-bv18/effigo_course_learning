@@ -8,6 +8,7 @@ import CourseList from "./Components/CourseList";
 import UsersList from "./Components/UsersList";
 import Register from "./Components/Register";
 import RegisteredCourseList from "./Components/RegisteredCourseList";
+import FavouriteCourseList from "./Components/FavouriteCourseList";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/courses" element={<CourseList />} />
           <Route path="/users" element={<UsersList/>}/>
           <Route path="/register" element={<Register/>}/>
+          <Route path="/favourite-courses" element={<FavouriteCourseList/>}/>
           <Route path="/registered-courses" element={<RegisteredCourseList/>}/>
         </Routes>
       </div>

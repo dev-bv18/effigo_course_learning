@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  backend:
+    build: .  # Change from './learning-portal' to '.' (current directory)
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres_db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/learningportal
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: baibhabnayak3121218
+  postgres_db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: learningportal
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: baibhabnayak3121218
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

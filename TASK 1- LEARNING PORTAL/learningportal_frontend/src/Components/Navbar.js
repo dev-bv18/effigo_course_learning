@@ -43,6 +43,11 @@ const Navbar = () => {
                             <NavLink to="/registered-courses" className="nav-link" onClick={() => setIsOpen(false)}>
                                           Registered Courses
                                         </NavLink></li>
+                                        <li className="nav-item">
+
+                                                                    <NavLink to="/favourite-courses" className="nav-link" onClick={() => setIsOpen(false)}>
+                                                                                  Favourite Courses
+                                                                                </NavLink></li>
               <li className="nav-item">
                           <NavLink to="/users" className="nav-link" onClick={() => setIsOpen(false)}>
                             Users

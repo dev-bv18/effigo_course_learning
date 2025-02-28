@@ -8,25 +8,101 @@ const RegisteredCourseList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [categoryImages, setCategoryImages] = useState({});
-
-  useEffect(() => {
+  const [favourites, setFavourites] = useState(new Set());
+useEffect(() => {
     fetchRegisteredCourses();
+    fetchFavouriteCourses();
   }, []);
+ const fetchFavouriteCourses = async () => {
+     try {
+       console.log("Fetching favourite courses...");
+       const response = await axios.get("http://localhost:8080/favourite-course-details/get-favourite-courses");
+       console.log("Favourite courses response:", response.data);
+       const favouriteIds = new Set(response.data.map((fav) => fav.registeredCourse.registrationId));
+       console.log("Setting favourites:", favouriteIds);
+       setFavourites(favouriteIds);
+     } catch (error) {
+       console.error("Error fetching favourite courses:", error);
+     }
+   };
+   const fetchRegisteredCourses = () => {
+      setLoading(true);
+      axios
+        .get("http://localhost:8080/registered-courses-details/get-registered-courses")
+        .then((response) => {
+          console.log("Registered courses response:", response.data);
+          setCourses(response.data);
+          fetchCategoryImages(response.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching registered courses:", error);
+          setError("Failed to load registered courses.");
+          setLoading(false);
+        });
+    };
+  const toggleFavourite = async (course) => {
+    const courseId = course.registrationId;
+    const isCurrentlyFavourite = favourites.has(courseId);
 
-  const fetchRegisteredCourses = () => {
-    setLoading(true);
-    axios.get("http://localhost:8080/registered-courses-details/get-registered-courses")
-      .then((response) => {
-        setCourses(response.data);
-        fetchCategoryImages(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching registered courses:", error);
-        setError("Failed to load registered courses.");
-        setLoading(false);
-      });
+    console.log(`Toggling favourite for course ID: ${courseId}, currently favourite: ${isCurrentlyFavourite}`);
+
+    if (isCurrentlyFavourite) {
+      try {
+        const response = await axios.get("http://localhost:8080/favourite-course-details/get-favourite-courses");
+        const favouriteCourse = response.data.find(fav => fav.registeredCourse.registrationId === courseId);
+
+        if (!favouriteCourse) {
+          console.error("Favourite course ID not found!");
+          alert("Error: Favourite course ID not found.");
+          return;
+        }
+
+        const favouriteId = favouriteCourse.favouriteId; // Get correct favouriteId
+        console.log(`Deleting favourite course with favouriteId: ${favouriteId}`);
+
+        await axios.delete(`http://localhost:8080/favourite-course-details/${favouriteId}`);
+
+        setFavourites((prevFavourites) => {
+          const newFavourites = new Set(prevFavourites);
+          newFavourites.delete(courseId);
+          return newFavourites;
+        });
+
+        console.log("Successfully removed from favourites:", favouriteId);
+      } catch (error) {
+        console.error("Error removing from favourites:", error);
+        alert("Failed to remove from favourites.");
+      }
+    } else {
+      try {
+        const favouriteCourseDTO = {
+          registeredCourse: { registrationId: courseId },
+        };
+
+        const response = await axios.post(
+          "http://localhost:8080/favourite-course-details/favourite-course",
+          favouriteCourseDTO
+        );
+
+        if (response.status === 200 || response.status === 201) {
+          setFavourites((prevFavourites) => {
+            const newFavourites = new Set(prevFavourites);
+            newFavourites.add(courseId);
+            return newFavourites;
+          });
+
+          console.log("Successfully added to favourites:", courseId);
+        }
+      } catch (error) {
+        console.error("Error adding to favourites:", error);
+        alert("Failed to add to favourites.");
+      }
+    }
   };
+
+
+
 
   const fetchCategoryImages = async (courses) => {
     const newCategoryImages = { ...categoryImages };
@@ -71,7 +147,7 @@ const RegisteredCourseList = () => {
 
       if (response.status === 200 || response.status === 204) {
         console.log("Successfully unregistered course ID:", courseId);
-        // 🔥 Update UI instantly
+
         setCourses((prevCourses) => prevCourses.filter(course => course.registrationId !== courseId));
       } else {
         console.error("Unexpected response status:", response.status);
@@ -101,6 +177,8 @@ const RegisteredCourseList = () => {
           courses.map((registeredCourse) => {
             const images = categoryImages[registeredCourse.course.category] || ["https://via.placeholder.com/400x250"];
             const randomImage = images[Math.floor(Math.random() * images.length)];
+             const isFavourite = favourites.has(registeredCourse.registrationId);
+
 
             return (
               <div key={registeredCourse.id} className="col-md-4 gx-4">
@@ -141,9 +219,16 @@ const RegisteredCourseList = () => {
                                        />
 
                                         </div>
-                                      <div className="position-absolute top-0 start-0 p-2">
-                                        <i className="bi bi-star-fill text-warning fs-3"></i>
-                                      </div>
+                                   <div
+                                     className="position-absolute top-0 start-0 p-2"
+
+                                   >
+                                   <i
+                                                        className={`bi ${isFavourite ? "bi-star-fill text-warning" : "bi-star text-white"} fs-3`}
+                                                        onClick={() => toggleFavourite(registeredCourse)}
+                                                        style={{ cursor: "pointer" }}
+                                                      ></i>
+ </div>
 
                     <h3 className="card-title text-light">{registeredCourse.course.courseTitle}</h3>
                    <p className="card-text flex-grow-1 text-white-50">{registeredCourse.course.desc}</p>
