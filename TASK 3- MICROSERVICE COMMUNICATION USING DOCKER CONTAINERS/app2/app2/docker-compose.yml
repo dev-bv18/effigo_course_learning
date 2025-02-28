@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app2:
+    image: app2:latest
+    build:
+      context: .  # Adjust path to your app2
+      dockerfile: Dockerfile
+    container_name: app2
+    ports:
+      - "8088:8088"  # Expose port 8088 for app2
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/data_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: baibhabnayak3121218
+    depends_on:
+      - db
+    networks:
+      - shared_network  # Use an external shared network
+
+  db:
+    image: postgres:13
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_DB: data_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: baibhabnayak3121218
+    ports:
+      - "5433:5432"  # Expose PostgreSQL port
+    networks:
+      - shared_network
+    volumes:
+      - db-data:/var/lib/postgresql/data  # Persist data between container restarts
+
+networks:
+  shared_network:
+    external: true  # Use external network
+
+volumes:
+  db-data:
+    driver: local

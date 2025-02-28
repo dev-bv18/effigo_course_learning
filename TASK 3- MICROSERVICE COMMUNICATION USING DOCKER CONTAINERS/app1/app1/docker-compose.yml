@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app1:
+    build:
+      context: .  # Adjust path to your app1 directory
+      dockerfile: Dockerfile
+    container_name: app1
+    ports:
+      - "8084:8085"  # Map app1's internal port 8085 to 8084 on the host
+    environment:
+      - APP2_URL=http://app2:8088  # Reference app2's URL on the shared network
+    networks:
+      - shared_network  # Use the external shared network
+
+networks:
+  shared_network:
+    external: true  # Use the external network that was created earlier
