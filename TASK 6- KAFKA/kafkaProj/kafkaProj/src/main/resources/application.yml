@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: kafkaProj
+
+  datasource:
+    url: jdbc:postgresql://training1.effigo.in:5432/training_2
+    driver-class-name: org.postgresql.Driver
+    username: upeg
+    password: sillicon
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: consumer-group-1
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    topic:
+      name: "my-topic"  # Define the topic here
+      fallback-topic: "my-fallback-topic"  # Define a fallback topic if needed
+server:
+  port: 8081
