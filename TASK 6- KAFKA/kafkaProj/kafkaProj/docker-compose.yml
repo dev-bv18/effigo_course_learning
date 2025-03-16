@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"  # Exposing Zookeeper port
+    networks:
+      - kafka-network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"  # Exposing Kafka port
+    networks:
+      - kafka-network
+
+  producer:
+    build:
+      context: .  # Producer's Dockerfile directory
+    container_name: producer
+    depends_on:
+      - kafka
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_KAFKA_PRODUCER_TOPIC: my-topic  # Specify the topic
+    ports:
+      - "8081:8081"  # Exposing port for producer application
+    networks:
+      - kafka-network
+
+networks:
+  kafka-network:
+    driver: bridge
+    external: true  # Shared network

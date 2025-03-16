@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  consumer:
+    build:
+      context: .  # Consumer's Dockerfile directory
+    container_name: consumer
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092  # Use existing Kafka instance
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5433/master_item
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: baibhabnayak3121218
+      SPRING_KAFKA_CONSUMER_GROUP_ID: my-consumer-group  # Consumer group
+      SPRING_KAFKA_CONSUMER_TOPIC: my-topic  # Specify the topic
+    ports:
+      - "8082:8082"  # Exposing port for consumer application
+    networks:
+      - kafka-network
+
+networks:
+  kafka-network:
+    external: true  # Use the same Kafka network

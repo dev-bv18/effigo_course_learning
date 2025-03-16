@@ -32,21 +32,21 @@ public class KafkaController {
     // POST endpoint to send messages to Kafka
     @PostMapping
     public ResponseEntity<String> sendMessage(@RequestParam String topic) {
-        // Fetch all items from the database using the service layer
+
         List<Item> items = itemService.getAllItems();
 
-        // Check if there are any items in the database
+
         if (items.isEmpty()) {
             logger.warn("No items available in the database.");
             return ResponseEntity.badRequest().body("No items available in the database.");
         }
 
-        int sentCount = 0; // Counter for successfully sent messages
+        int sentCount = 0;
 
-        // Loop through each item and send it to Kafka with fallback logic
+
         for (Item item : items) {
             try {
-                // Convert Item object to JSON string using ObjectMapper
+
                 String message = objectMapper.writeValueAsString(item);
                 boolean sentSuccessfully = producerService.sendMessageWithFallback(topic, message);
 
@@ -63,7 +63,7 @@ public class KafkaController {
 
         logger.info("Total messages sent successfully: {}/{}", sentCount, items.size());
 
-        // Return success response with count
+
         return ResponseEntity.ok("Messages sent to Kafka successfully! Sent: " + sentCount + "/" + items.size());
     }
 }

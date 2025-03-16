@@ -1,34 +1,34 @@
 spring:
   application:
-    name: kafkaCon
+    name: kafkaConsumer
 
+  # Database configuration (PostgreSQL)
   datasource:
-    url: jdbc:postgresql://localhost:5433/master_item
+    url: jdbc:postgresql://localhost:5433/master_item  # Update with your PostgreSQL database URL
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: baibhabnayak3121218
+    password: baibhabnayak3121218  # Update with your database password
 
+  # JPA (Hibernate) configuration
   jpa:
     hibernate:
-      ddl-auto: update  # Use 'update' instead of 'auto' to prevent accidental schema loss
+      ddl-auto: update  # Adjust based on your schema management needs
     show-sql: true
     properties:
       hibernate:
         format_sql: true
 
+  # Kafka consumer configuration
   kafka:
-    bootstrap-servers: localhost:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    bootstrap-servers: localhost:9092  # Assuming Kafka container is accessible at this address
     consumer:
-      group-id: consumer-group-1
-      auto-offset-reset: earliest
+      group-id: consumer-group-1  # Consumer group ID
+      auto-offset-reset: earliest  # Start from the earliest message
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    topic:
+      main: "my-topic"  # Main Kafka topic
+      fallback: "my-fallback-topic"  # Fallback Kafka topic for failed messages
 
-# Define Kafka topics separately
-kafka:
-  topic:
-    main: "my-topic"  # Main Kafka topic
-    fallback: "my-fallback-topic"  # Fallback topic for failed messages
+  # Define Kafka topics (main topic and fallback topic)
+

@@ -35,7 +35,6 @@ public class ItemController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Health check endpoint (optional)
     @GetMapping("/health")
     public ResponseEntity<String> healthCheck() {
         return ResponseEntity.ok("Consumer service is running!");

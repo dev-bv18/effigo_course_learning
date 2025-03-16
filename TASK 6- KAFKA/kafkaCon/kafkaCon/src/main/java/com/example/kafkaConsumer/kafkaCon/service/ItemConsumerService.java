@@ -1,15 +1,18 @@
 package com.example.kafkaConsumer.kafkaCon.service;
 
-
 import com.example.kafkaConsumer.kafkaCon.entity.Item;
 import com.example.kafkaConsumer.kafkaCon.repository.ItemRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ItemConsumerService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ItemConsumerService.class);
 
     private final ItemRepository itemConsumerRepository;
     private final ObjectMapper objectMapper;
@@ -18,25 +21,19 @@ public class ItemConsumerService {
         this.itemConsumerRepository = itemRepository;
         this.objectMapper = objectMapper;
     }
-
-    // Kafka Listener to consume messages from the topic
     @KafkaListener(topics = "my-topic", groupId = "consumer-group-1")
     @Transactional
     public void consumeMessage(String message) {
         try {
-            // Deserialize JSON message to ItemConsumer object
-            Item item = objectMapper.readValue(message, Item.class);
+            logger.info("Received message: {}", message);
 
-            // Save the consumed item to the database
+            Item item = objectMapper.readValue(message, Item.class);
             itemConsumerRepository.save(item);
 
-            // Log success
-            System.out.println("✅ Message consumed and saved: " + item.getItemId());
+            logger.info("Message consumed and saved with item ID: {}", item.getItemId());
 
         } catch (Exception e) {
-            // Handle exceptions (e.g., deserialization errors)
-            System.err.println("❌ Failed to process Kafka message: " + e.getMessage());
+            logger.error("Failed to process Kafka message: {}", message, e);
         }
     }
 }
-

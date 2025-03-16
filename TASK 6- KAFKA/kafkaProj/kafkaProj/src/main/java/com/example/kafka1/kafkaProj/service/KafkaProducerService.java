@@ -31,21 +31,33 @@ public class KafkaProducerService {
                 // Attempt to send the message
                 kafkaTemplate.send(new ProducerRecord<>(topic, message)).get(10, TimeUnit.SECONDS); // Blocking until sent
                 logger.info("Message successfully sent to topic '{}': {}", topic, message);
-                return true;
+                return true; // Successfully sent
             } catch (TimeoutException | KafkaException e) {
                 retryCount++;
                 logger.warn("Failed to send message to topic '{}', attempt {}/{}. Retrying...", topic, retryCount, maxRetries);
             } catch (Exception e) {
                 logger.error("Unexpected error while sending message to topic '{}': {}", topic, e.getMessage(), e);
-                return false; // Failure in non-retryable cases
+                break; // Break loop for non-retryable exceptions
             }
         }
 
-        logger.error("Failed to send message to topic '{}' after {} attempts.", topic, maxRetries);
-        return false; // Fallback: message couldn't be sent
+        // If all retries failed, send message to fallback topic
+        logger.error("Failed to send message to topic '{}' after {} attempts. Moving to fallback topic.", topic, maxRetries);
+        sendToFallback(message);
+
+        return false; // Message failed after retries
     }
 
-    // Normal sendMessage (without fallback)
+    // Send the message to fallback topic
+    private void sendToFallback(String message) {
+        try {
+            kafkaTemplate.send("my-fallback-topic", message);
+            logger.info("Message moved to fallback topic: {}", message);
+        } catch (Exception e) {
+            logger.error("Failed to send message to fallback topic: {}", e.getMessage(), e);
+        }
+    }
+
     public void sendMessage(String topic, String message) {
         try {
             kafkaTemplate.send(topic, message);
