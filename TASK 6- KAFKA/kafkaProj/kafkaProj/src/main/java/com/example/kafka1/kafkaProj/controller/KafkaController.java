@@ -20,7 +20,7 @@ public class KafkaController {
 
     private final KafkaProducerService producerService;
     private final ItemService itemService;
-    private final ObjectMapper objectMapper; // Jackson ObjectMapper for JSON conversion
+    private final ObjectMapper objectMapper;
 
     @Autowired
     public KafkaController(KafkaProducerService producerService, ItemService itemService, ObjectMapper objectMapper) {
@@ -35,35 +35,22 @@ public class KafkaController {
 
         List<Item> items = itemService.getAllItems();
 
-
         if (items.isEmpty()) {
             logger.warn("No items available in the database.");
             return ResponseEntity.badRequest().body("No items available in the database.");
         }
 
-        int sentCount = 0;
-
-
         for (Item item : items) {
             try {
-
                 String message = objectMapper.writeValueAsString(item);
-                boolean sentSuccessfully = producerService.sendMessageWithFallback(topic, message);
-
-                if (sentSuccessfully) {
-                    sentCount++;
-                } else {
-                    logger.error("Failed to send message for item ID: {}, Message: {}", item.getItemId(), message);
-                }
+                producerService.sendMessageWithRetry(topic, message, 0);  // Calling the correct method here
             } catch (Exception e) {
                 logger.error("Failed to send message due to serialization error: {}", e.getMessage(), e);
                 return ResponseEntity.status(500).body("Failed to send message due to serialization error.");
             }
         }
 
-        logger.info("Total messages sent successfully: {}/{}", sentCount, items.size());
-
-
-        return ResponseEntity.ok("Messages sent to Kafka successfully! Sent: " + sentCount + "/" + items.size());
+        logger.info("Messages sent asynchronously.");
+        return ResponseEntity.ok("Messages sent to Kafka asynchronously!");
     }
 }

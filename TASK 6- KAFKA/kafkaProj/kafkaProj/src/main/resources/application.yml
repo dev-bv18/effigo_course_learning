@@ -22,12 +22,18 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
-      group-id: producer-group-1
+      group-id: producer-group-1  # Main consumer group for 'my-topic'
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     topic:
-      name: "my-topic"  # Define the topic here
-      fallback-topic: "my-fallback-topic"  # Define a fallback topic if needed
+      name: "my-topic"  # Main topic for messages
+      fallback-topic: "my-fallback-topic"  # Fallback topic
+    consumer-fallback:
+      group-id: fallback-consumer-group  # Separate consumer group for 'my-fallback-topic'
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
 server:
   port: 8081
