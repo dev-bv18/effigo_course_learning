@@ -4,7 +4,6 @@ import com.example.kafka1.kafkaProj.entity.Item;
 import com.example.kafka1.kafkaProj.service.ItemService;
 import com.example.kafka1.kafkaProj.service.KafkaProducerService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
@@ -22,7 +21,7 @@ public class KafkaController {
     private final ItemService itemService;
     private final ObjectMapper objectMapper;
 
-    @Autowired
+
     public KafkaController(KafkaProducerService producerService, ItemService itemService, ObjectMapper objectMapper) {
         this.producerService = producerService;
         this.itemService = itemService;
