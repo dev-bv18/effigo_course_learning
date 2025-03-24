@@ -29,9 +29,9 @@ public class UserService {
 
     // Delete user from database
     public boolean deleteUserFromDatabase(String username) {
-        User user = userRepository.findByUsername(username).orElse(null);
+        List<User> user = userRepository.findAllByUsername(username).orElse(null);
         if (user != null) {
-            userRepository.delete(user);
+            userRepository.deleteAll(user);
             return true;
         }
         return false;

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "master_item", schema = "public")  // Change table/schema as needed
+@Table(name = "master_item", schema = "public")
 @Getter
 @Setter
 public class Item {
@@ -135,5 +135,5 @@ public class Item {
     private String subCategory;
 
     @Column(name = "consumed_timestamp", nullable = false)
-    private Timestamp consumedTimestamp = new Timestamp(System.currentTimeMillis()); // Stores when the message was consumed
+    private Timestamp consumedTimestamp = new Timestamp(System.currentTimeMillis());
 }

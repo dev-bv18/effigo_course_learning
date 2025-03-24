@@ -12,7 +12,7 @@ public class MultiCache<K, V> implements Cache<K, V> {
 
     private static final Logger logger = LoggerFactory.getLogger(MultiCache.class);
 
-    private final List<Cache<K, V>> caches;  // Using generic Cache type here
+    private final List<Cache<K, V>> caches;
 
     public MultiCache(List<Cache<K, V>> caches) {
         if (caches == null || caches.isEmpty()) {
@@ -26,12 +26,11 @@ public class MultiCache<K, V> implements Cache<K, V> {
         for (Cache<K, V> cache : caches) {
             V value = cache.get(key);
             if (value != null) {
-                logger.info("✅ Found in cache: {}", cache.getClass().getSimpleName());
+                logger.info("Found in cache: {}", cache.getClass().getSimpleName());
 
-                // Only promote to the top cache (if it's not already the top cache)
                 if (cache != caches.get(0)) {
-                    logger.info("⬆️ Promoting to top cache: {}", caches.get(0).getClass().getSimpleName());
-                    caches.get(0).put(key, value); // Promote to the top cache (Caffeine)
+                    logger.info("Promoting to top cache: {}", caches.get(0).getClass().getSimpleName());
+                    caches.get(0).put(key, value);
                 }
                 return value;
             }
@@ -43,7 +42,7 @@ public class MultiCache<K, V> implements Cache<K, V> {
     public void put(K key, V value) {
         caches.forEach(cache -> {
             cache.put(key, value);
-            logger.info("✅ Saved to cache: {}", cache.getClass().getSimpleName());
+            logger.info("Saved to cache: {}", cache.getClass().getSimpleName());
         });
     }
 
@@ -51,14 +50,14 @@ public class MultiCache<K, V> implements Cache<K, V> {
     public void evict(K key) {
         caches.forEach(cache -> {
             cache.evict(key);
-            logger.info("❌ Evicted from cache: {}", cache.getClass().getSimpleName());
+            logger.info("Evicted from cache: {}", cache.getClass().getSimpleName());
         });
     }
 
     @Override
     public void evictAll() {
         caches.forEach(Cache::evictAll);
-        logger.info("✅ Cleared all caches.");
+        logger.info("Cleared all caches.");
     }
 
     @Override

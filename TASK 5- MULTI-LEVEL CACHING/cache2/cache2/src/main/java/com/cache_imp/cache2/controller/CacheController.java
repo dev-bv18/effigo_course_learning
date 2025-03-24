@@ -30,8 +30,7 @@ public class CacheController {
         this.caffeineCache = caffeineCache;
         this.redisCache = redisCache;
 
-        // Initialize multiCache with the correct types, using the exact type signature
-        this.multiCache = new MultiCache<>(List.of(caffeineCache, redisCache)); // Both caches are Cache<String, User>
+        this.multiCache = new MultiCache<>(List.of(caffeineCache, redisCache));
         this.userService = userService;
     }
 

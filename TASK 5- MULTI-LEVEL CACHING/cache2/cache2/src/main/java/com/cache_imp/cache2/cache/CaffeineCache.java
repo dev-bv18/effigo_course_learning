@@ -26,9 +26,9 @@ public class CaffeineCache<K, V> implements Cache<K, V> {
     public V get(K key) {
         V value = cache.getIfPresent(key);
         if (value != null) {
-            logger.info("🟢 Cache HIT for key: {}", key);
+            logger.info(" Cache HIT for key: {}", key);
         } else {
-            logger.warn("🔴 Cache MISS for key: {}", key);
+            logger.warn(" Cache MISS for key: {}", key);
         }
         return value;
     }
@@ -36,19 +36,19 @@ public class CaffeineCache<K, V> implements Cache<K, V> {
     @Override
     public void put(K key, V value) {
         cache.put(key, value);
-        logger.info("✅ Added to Caffeine Cache - Key: {}", key);
+        logger.info("Added to Caffeine Cache - Key: {}", key);
     }
 
     @Override
     public void evict(K key) {
         cache.invalidate(key);
-        logger.info("❌ Evicted from Caffeine Cache - Key: {}", key);
+        logger.info("Evicted from Caffeine Cache - Key: {}", key);
     }
 
     @Override
     public void evictAll() {
         cache.invalidateAll();
-        logger.info("❌ Cleared all entries from Caffeine Cache.");
+        logger.info("Cleared all entries from Caffeine Cache.");
     }
 
     @Override

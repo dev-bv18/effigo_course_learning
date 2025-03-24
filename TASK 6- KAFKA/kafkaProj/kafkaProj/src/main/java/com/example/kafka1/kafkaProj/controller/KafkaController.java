@@ -42,7 +42,7 @@ public class KafkaController {
         for (Item item : items) {
             try {
                 String message = objectMapper.writeValueAsString(item);
-                producerService.sendMessageWithRetry(topic, message, 0);  // Calling the correct method here
+                producerService.sendMessageWithRetry(topic, message, 0);
             } catch (Exception e) {
                 logger.error("Failed to send message due to serialization error: {}", e.getMessage(), e);
                 return ResponseEntity.status(500).body("Failed to send message due to serialization error.");

@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class RedisCache implements Cache<String, User> {  // Change to Cache<String, User>
+public class RedisCache implements Cache<String, User> {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisCache.class);
 
@@ -22,7 +22,7 @@ public class RedisCache implements Cache<String, User> {  // Change to Cache<Str
     @Autowired
     public RedisCache(RedisTemplate<String, User> redisTemplate) {
         this.redisTemplate = redisTemplate;
-        logger.info("✅ RedisCache initialized with RedisTemplate: {}", redisTemplate);
+        logger.info(" RedisCache initialized with RedisTemplate: {}", redisTemplate);
     }
 
     @Override
@@ -33,13 +33,13 @@ public class RedisCache implements Cache<String, User> {  // Change to Cache<Str
     @Override
     public void put(String key, User value) {
         redisTemplate.opsForValue().set(key, value);
-        logger.info("✅ Added to Redis Cache - Key: {}", key);
+        logger.info("Added to Redis Cache - Key: {}", key);
     }
 
     @Override
     public void evict(String key) {
         redisTemplate.delete(key);
-        logger.info("✅ Evicted from Redis Cache - Key: {}", key);
+        logger.info("Evicted from Redis Cache - Key: {}", key);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class RedisCache implements Cache<String, User> {  // Change to Cache<Str
             keys.add(new String(cursor.next()));
         }
 
-        logger.info("🔑 Retrieved {} keys from Redis Cache.", keys.size());
+        logger.info("Retrieved {} keys from Redis Cache.", keys.size());
         return keys;
     }
 }

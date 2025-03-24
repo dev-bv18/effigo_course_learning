@@ -1,5 +1,4 @@
 package com.example.kafka1.kafkaProj.service;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.errors.TimeoutException;
 import org.apache.kafka.common.errors.RetriableException;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -17,9 +16,8 @@ public class KafkaProducerService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private static final int MAX_RETRIES = 3;
     private static final String TRANSACTION_TOPIC = "my-topic";
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    // Queue to store failed messages
+
     private final BlockingQueue<String> failedQueue = new LinkedBlockingQueue<>();
 
     public KafkaProducerService(KafkaTemplate<String, String> kafkaTemplate) {
@@ -29,7 +27,7 @@ public class KafkaProducerService {
     public void sendMessageWithRetry(String topic, String message, int attempt) {
         if (attempt >= MAX_RETRIES) {
             logger.error("Max retries reached. Adding message to failed queue: {}", message);
-            failedQueue.offer(message);  // Store in queue
+            failedQueue.offer(message);
             return;
         }
 
@@ -56,7 +54,7 @@ public class KafkaProducerService {
         });
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 5000)
     public void retryFailedMessages() {
         if (failedQueue.isEmpty()) {
             return;
@@ -65,7 +63,7 @@ public class KafkaProducerService {
         logger.info("Retrying failed messages...");
         int size = failedQueue.size();
         for (int i = 0; i < size; i++) {
-            String message = failedQueue.poll();  // Get message from queue
+            String message = failedQueue.poll();
             if (message != null) {
                 sendMessageWithRetry(TRANSACTION_TOPIC, message, 0);
             }
