@@ -1,0 +1,12 @@
+startDelaySeconds: 0
+lowercaseOutputName: true
+lowercaseOutputLabelNames: true
+rules:
+  - pattern: 'Catalina<type=(\w+),name=([^,]+)><>(\w+)'
+    name: tomcat_${1}_${2}_${3}
+    type: GAUGE
+    help: "Tomcat ${1} ${2} ${3} metric"
+  - pattern: 'Catalina<type=ThreadPool,name=([^,]+)><>(\w+)'
+    name: tomcat_threadpool_${1}_${2}
+    type: GAUGE
+    help: "Tomcat ThreadPool ${1} ${2} metric"

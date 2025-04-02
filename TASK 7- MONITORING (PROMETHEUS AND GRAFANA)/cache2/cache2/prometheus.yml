@@ -1,0 +1,46 @@
+# Global settings
+global:
+  scrape_interval: 3s  # Scrape every 15 seconds
+  evaluation_interval: 3s  # Evaluate rules every 15 seconds (if any)
+
+# Alertmanager configuration (optional for alerting)
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+          # Add Alertmanager configurations here if you want alerting set up in the future
+
+# Rule files for custom alerting rules (optional)
+rule_files: []
+
+# Scrape configurations
+scrape_configs:
+
+  # Scrape Prometheus itself (for internal monitoring)
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+        labels:
+          app: "prometheus"
+
+  # # Scrape the Tomcat application exposing metrics
+  # - job_name: "tomcat_app"
+  #   metrics_path: "/metrics"  # Ensure Tomcat exposes metrics on /metrics
+  #   static_configs:
+  #     - targets: ["localhost:8080"]  # Replace with actual Tomcat server address if different
+  #       labels:
+  #         app: "tomcat"
+
+  # Scrape Spring Boot application Actuator metrics (if needed)
+  - job_name: "springboot_app"
+    metrics_path: "/actuator/prometheus"  # Expose Spring Boot Actuator metrics on /actuator/prometheus
+    static_configs:
+      - targets: ["springboot-app:8080"]  # Replace with actual Spring Boot app address if different
+        labels:
+          app: "springboot"
+
+  - job_name: 'java-app'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['springboot-app:8081']
+
