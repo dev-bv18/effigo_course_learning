@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # Spring Boot application service
+  app:
+    image: studentapp
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/k8student  # Use 'db' instead of 'localhost'
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=baibhabnayak3121218
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_APPLICATION_NAME=K8Student
+    depends_on:
+      - db
+    networks:
+      - k8student-network
+
+  # PostgreSQL database service
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: k8student
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: baibhabnayak3121218
+    ports:
+      - "5434:5432"  # External port is 5434, but inside the container it's 5432
+    networks:
+      - k8student-network
+
+networks:
+  k8student-network:
+    driver: bridge
